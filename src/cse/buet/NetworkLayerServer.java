@@ -44,9 +44,9 @@ public class NetworkLayerServer {
 
         initRoutingTables(); //Initialize routing tables for all routers
 
-//        DVR(1); //Update routing table using distance vector routing until convergence
-        simpleDVR(1);
-        System.out.println("S dvr finished");
+        DVR(1); //Update routing table using distance vector routing until convergence
+//        simpleDVR(1);
+//        System.out.println("S dvr finished");
         stateChanger = new RouterStateChanger();//Starts a new thread which turns on/off routers randomly depending on parameter Constants.LAMBDA
 
         while(true) {

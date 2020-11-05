@@ -70,14 +70,8 @@ public class ServerThread implements Runnable {
         }
         networkUtility.closeConnection();
 //        System.out.println("ConnectionClosed");
-        try(FileWriter fr = new FileWriter("report.txt",true);
-            BufferedWriter br = new BufferedWriter(fr)) {
+        System.out.println("Lambda : "+Constants.LAMBDA+", AHC : "+total_hop_count*1.0/successful_packets+", drop rate : "+dropped+"\n");
 
-            if(successful_packets>0)
-                br.write("Lambda : "+Constants.LAMBDA+", AHC : "+total_hop_count*1.0/successful_packets+", drop rate : "+dropped+"\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -134,8 +128,8 @@ public class ServerThread implements Runnable {
                         nextRTE.setDistance(Constants.INFINITY);
                         RouterStateChanger.islocked = true;
 //                        System.out.println("DVR started");
-//                        NetworkLayerServer.DVR(source.getRouterId());
-                        NetworkLayerServer.simpleDVR(source.getRouterId());
+                        NetworkLayerServer.DVR(source.getRouterId());
+//                        NetworkLayerServer.simpleDVR(source.getRouterId());
 //                        System.out.println("DVR finished");
                         RouterStateChanger.islocked = false;
                         synchronized (RouterStateChanger.msg) {
@@ -151,8 +145,8 @@ public class ServerThread implements Runnable {
                     nextRouter.getRouterIDtoRoutingTableEntry().get(source.getRouterId()).setGatewayRouterId(source.getRouterId());
                     RouterStateChanger.islocked = true;
 //                    System.out.println("DVR started");
-//                    NetworkLayerServer.DVR(nextRouter.getRouterId());
-                    NetworkLayerServer.simpleDVR(source.getRouterId());
+                    NetworkLayerServer.DVR(nextRouter.getRouterId());
+//                    NetworkLayerServer.simpleDVR(source.getRouterId());
 //                    System.out.println("DVR finished");
                     RouterStateChanger.islocked = false;
                     synchronized (RouterStateChanger.msg) {
