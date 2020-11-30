@@ -116,4 +116,11 @@ Average number of hops and drop rate i reported
 
     ApplysimpleDVR()instead ofDVR()keepingLAMBDA = 0.10 and compare how drop
     rate changes because of implementing split horizon and forced update. Briefly put your
-    reasoning.
+    reasoning.  
+
+      
+        
+        
+
+
+    ![Report](./images/report.png)
