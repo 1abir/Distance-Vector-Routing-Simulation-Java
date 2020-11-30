@@ -58,7 +58,7 @@ public class ServerThread implements Runnable {
             return;
         }
         List<Packet> packets = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             Packet packet = null;
             try {
                 packet = (Packet) networkUtility.read();
@@ -114,8 +114,11 @@ public class ServerThread implements Runnable {
         else {
             p.increamentHopCount();
             StringBuilder path = new StringBuilder();
+            StringBuilder routingTables = new StringBuilder();
+            routingTables.append("Routing Tables :\n");
             path.append("Path : ");
             path.append(source.getRouterId());
+            routingTables.append(source.strRoutingTable()).append("\n");
             RoutingTableEntry nextRTE = source.getRouterIDtoRoutingTableEntry().get(destination.getRouterId());
             Router nextRouter = NetworkLayerServer.routerMap.get(nextRTE.getGatewayRouterId());
             while (source.getRouterId() != destination.getRouterId()) {
@@ -136,7 +139,7 @@ public class ServerThread implements Runnable {
                             RouterStateChanger.msg.notifyAll();
                         }
                     }
-                    networkUtility.write("Hop Count : "+p.getHopcount()+"\n"+path.toString() + "\n"+msg+". Packet Dropped");
+                    networkUtility.write("Hop Count : "+p.getHopcount()+"\n"+path.toString() + "\n"+msg+". Packet Dropped\n"+routingTables.toString());
                     return false;
                 }
 
@@ -158,16 +161,17 @@ public class ServerThread implements Runnable {
 
                 if(p.getHopcount() > Constants.INFINITY){
                     dropped++;
-                    networkUtility.write("Hop Count : "+p.getHopcount()+"\n"+path.toString() + "\n"+"TTL Expired"+". Packet Dropped");
+                    networkUtility.write("Hop Count : "+p.getHopcount()+"\n"+path.toString() + "\n"+"TTL Expired"+". Packet Dropped\n"+routingTables.toString());
                     return false;
                 }
 
                 path.append("->").append(nextRouter.getRouterId());
+                routingTables.append(nextRouter.strRoutingTable()).append("\n");
                 source = nextRouter;
                 nextRTE = source.getRouterIDtoRoutingTableEntry().get(destination.getRouterId());
                 nextRouter = NetworkLayerServer.routerMap.get(nextRTE.getGatewayRouterId());
             }
-            networkUtility.write("Hop Count : "+p.getHopcount()+"\n"+path.toString()+"\nPacket sent successfully");
+            networkUtility.write("Hop Count : "+p.getHopcount()+"\n"+path.toString()+"\nPacket sent successfully\n"+routingTables.toString());
             successful_packets+=1;
             total_hop_count+=p.getHopcount();
             return true;

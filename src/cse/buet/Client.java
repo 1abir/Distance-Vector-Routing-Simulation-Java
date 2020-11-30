@@ -56,12 +56,12 @@ public class Client {
                 return;
             }
             networkUtility.write("success");
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 10; i++) {
                 String message, specialMessage = "";
                 message = "Message : " + i;
-                if (i == 20) {
+//                if (i == 20) {
                     specialMessage = "SHOW_ROUTE";
-                }
+//                }
 
                 int indx = random.nextInt(activeClientIps.size());
                 if (activeClientIps.size() != 1)
@@ -71,10 +71,10 @@ public class Client {
                 Packet packet = new Packet(message, specialMessage, endDevice.getIpAddress(),activeClientIps.get(indx));
                 networkUtility.write(packet);
                 String acknowledgement = (String) networkUtility.read();
-                if(i==20){
+//                if(i==20){
                     System.out.println("Source : "+packet.getSourceIP()+" , Destination : "+packet.getDestinationIP());
                     System.out.println(acknowledgement);
-                }
+//                }
             }
         }
         else {
